@@ -13,10 +13,14 @@ namespace team6
         // Dev 1 - User & AgentProfile
         public DbSet<User> Users { get; set; }
         public DbSet<AgentProfile> AgentProfiles { get; set; }
-
+        
         // NOTE for teammates: add your DbSet<T> properties below this line
         // e.g. public DbSet<Property> Properties { get; set; }
 
+        // Dev 5 - Contract & Payment
+        public DbSet<Contract> Contracts { get; set; }
+        public DbSet<Payment> Payments { get; set; }
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -32,8 +36,30 @@ namespace team6
             modelBuilder.Entity<User>()
                 .HasIndex(u => u.Email)
                 .IsUnique();
-
+            
             // NOTE for teammates: add your relationship configs below this line
+            
+            // Dev 5 - Contract -> User (many contracts can belong to one client)
+            modelBuilder.Entity<Contract>()
+                .HasOne(c => c.User)
+                .WithMany()
+                .HasForeignKey(c => c.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+            
+            // TODO (Dev 5): uncomment once Dev 3's Listing.cs is merged
+            // Dev 5 - Contract -> Listing (many contracts can reference one listing)
+            //modelBuilder.Entity<Contract>()
+            //.HasOne<Listing>()
+            //.WithMany(l => l.Contracts)
+            //.HasForeignKey(c => c.ListingId)
+            //.OnDelete(DeleteBehavior.Restrict);
+
+            // Dev 5 - Contract -> Payment (one contract, many payments)
+            modelBuilder.Entity<Payment>()
+                .HasOne(p => p.Contract)
+                .WithMany(c => c.Payments)
+                .HasForeignKey(p => p.ContractId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
