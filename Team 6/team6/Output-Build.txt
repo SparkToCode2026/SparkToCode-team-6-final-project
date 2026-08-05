@@ -1,0 +1,5 @@
+﻿Build started at 12:30 PM...
+1>------ Build started: Project: team6, Configuration: Debug Any CPU ------
+1>  team6 -> C:\Users\wk304\Downloads\Team6\SparkToCode-team-6-final-project\Team 6\team6\bin\Debug\net10.0\team6.dll
+========== Build: 1 succeeded, 0 failed, 0 up-to-date, 0 skipped ==========
+========== Build completed at 12:30 PM and took 00.648 seconds ==========
