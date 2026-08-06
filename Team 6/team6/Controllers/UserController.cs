@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using team6.Models;
+using Microsoft.AspNetCore.Authorization;  // Added for [Authorize] attribute
 
 namespace team6.Controllers
 {
@@ -78,8 +79,9 @@ namespace team6.Controllers
             return Ok(user);
         }
 
-        // CASE 4: DELETE - Delete a user
+        // CASE 4: DELETE - Delete a user (PROTECTED - requires authentication)
         // DELETE: api/User/5
+        [Authorize]  // Added to protect this sensitive endpoint
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {
