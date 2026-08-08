@@ -25,6 +25,6 @@ namespace team6.Models
 
         // Navigation property: one User can have one AgentProfile (only if Role == "Agent")
         public AgentProfile? AgentProfile { get; set; }
-        public ICollection<Viewing> Viewings { get; set; }
+        public required ICollection<Viewing> Viewings { get; set; }
     }
 }
