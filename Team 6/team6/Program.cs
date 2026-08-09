@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using team6;
+using team6.Services; 
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +12,9 @@ builder.Services.AddControllers();
 // Register the DbContext with SQL Server
 builder.Services.AddDbContext<ProjectContex>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// Register email service (Dev 3 - Viewing Confirmation trigger)
+builder.Services.AddScoped<IEmailService, EmailService>(); 
 
 // JWT Authentication
 var jwtKey = builder.Configuration["Jwt:Key"]!;

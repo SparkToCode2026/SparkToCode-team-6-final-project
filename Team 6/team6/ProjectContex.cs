@@ -68,9 +68,12 @@ namespace team6
             // Dev 3 - Viewing -> User (many viewings per user)
             modelBuilder.Entity<Viewing>()
                 .HasOne(v => v.User)
-                .WithMany()
+                .WithMany(u => u.Viewings)
                 .HasForeignKey(v => v.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Listing>()
+                .Property(l => l.Price)
+                .HasColumnType("decimal(18,2)");
             
             // Dev 5 - Contract -> Payment (one contract, many payments)
             modelBuilder.Entity<Payment>()
