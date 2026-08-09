@@ -24,6 +24,6 @@ namespace team6.Models
         // Navigation Properties
         public User User { get; set; }
 
-        public Property Property { get; set; }
+        //public Property Property { get; set; }
     }
 }

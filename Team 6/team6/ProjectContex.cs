@@ -17,6 +17,10 @@ namespace team6
         // NOTE for teammates: add your DbSet<T> properties below this line
         // e.g. public DbSet<Property> Properties { get; set; }
 
+        // Dev 3 - Listing & Viewing
+        public DbSet<Listing> Listings { get; set; }
+        public DbSet<Viewing> Viewings { get; set; }
+        
         // Dev 5 - Contract & Payment
         public DbSet<Contract> Contracts { get; set; }
         public DbSet<Payment> Payments { get; set; }
@@ -53,7 +57,24 @@ namespace team6
             //.WithMany(l => l.Contracts)
             //.HasForeignKey(c => c.ListingId)
             //.OnDelete(DeleteBehavior.Restrict);
+            
+            // Dev 3 - Viewing -> Listing (many viewings per listing)
+            modelBuilder.Entity<Viewing>()
+                .HasOne(v => v.Listing)
+                .WithMany(l => l.Viewings)
+                .HasForeignKey(v => v.ListingId)
+                .OnDelete(DeleteBehavior.Cascade);
 
+            // Dev 3 - Viewing -> User (many viewings per user)
+            modelBuilder.Entity<Viewing>()
+                .HasOne(v => v.User)
+                .WithMany(u => u.Viewings)
+                .HasForeignKey(v => v.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Listing>()
+                .Property(l => l.Price)
+                .HasColumnType("decimal(18,2)");
+            
             // Dev 5 - Contract -> Payment (one contract, many payments)
             modelBuilder.Entity<Payment>()
                 .HasOne(p => p.Contract)
