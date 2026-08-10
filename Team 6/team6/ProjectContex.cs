@@ -50,13 +50,12 @@ namespace team6
                 .HasForeignKey(c => c.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // TODO (Dev 5): uncomment once Dev 3's Listing.cs is merged
             // Dev 5 - Contract -> Listing (many contracts can reference one listing)
-            //modelBuilder.Entity<Contract>()
-            //.HasOne<Listing>()
-            //.WithMany(l => l.Contracts)
-            //.HasForeignKey(c => c.ListingId)
-            //.OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Contract>()
+                .HasOne<Listing>()
+                .WithMany(l => l.Contracts)
+                .HasForeignKey(c => c.ListingId)
+                .OnDelete(DeleteBehavior.Restrict);
             
             // Dev 3 - Viewing -> Listing (many viewings per listing)
             modelBuilder.Entity<Viewing>()
