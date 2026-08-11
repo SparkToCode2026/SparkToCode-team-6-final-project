@@ -21,4 +21,7 @@ public class Listing
     //Navigation properties
     public ICollection<Viewing> Viewings { get; set; } = new List<Viewing>();
     public ICollection<Favorite> Favorites { get; set; } = new List<Favorite>();
+    
+    // Added by Dev 5 — needed to wire Contract.ListingId as a real FK.
+    public ICollection<Contract> Contracts { get; set; } = new List<Contract>();
 }
