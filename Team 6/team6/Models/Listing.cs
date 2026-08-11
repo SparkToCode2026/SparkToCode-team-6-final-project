@@ -10,13 +10,13 @@ public class Listing
     
     public decimal Price { get; set; }
  
-    public string Status { get; set; }   
+    public string? Status { get; set; }   
     
     public DateTime ListingDate { get; set; }
     
     [ForeignKey("Property")]
     public int PropertyId { get; set; }
-    //public Property Property { get; set; }
+    public Property? Property { get; set; }
  
     //Navigation properties
     public ICollection<Viewing> Viewings { get; set; } = new List<Viewing>();

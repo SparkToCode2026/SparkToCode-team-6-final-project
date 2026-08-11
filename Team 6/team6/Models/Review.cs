@@ -22,8 +22,8 @@ namespace team6.Models
         public int PropertyId { get; set; }
 
         // Navigation Properties
-        public User User { get; set; }
+        public User? User { get; set; }
 
-        //public Property Property { get; set; }
+        public Property? Property { get; set; }
     }
 }
