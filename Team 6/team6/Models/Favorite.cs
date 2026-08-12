@@ -15,8 +15,8 @@ namespace team6.Models
         public int ListingId { get; set; }
 
         // Navigation Properties
-        public User User { get; set; }
+        public User? User { get; set; }
 
-        public Listing Listing { get; set; }
+        public Listing? Listing { get; set; }
     }
 }

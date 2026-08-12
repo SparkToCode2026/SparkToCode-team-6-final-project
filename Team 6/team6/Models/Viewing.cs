@@ -14,10 +14,10 @@ public class Viewing
     
     [ForeignKey("Listing")]
     public int ListingId { get; set; }
-    public required Listing Listing { get; set; }
+    public required Listing? Listing { get; set; }
     
     
     [ForeignKey("User")]
     public int UserId { get; set; }
-    public required User User { get; set; }
+    public required User? User { get; set; }
 }

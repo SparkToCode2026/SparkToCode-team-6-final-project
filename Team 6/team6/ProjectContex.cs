@@ -13,9 +13,13 @@ namespace team6
         // Dev 1 - User & AgentProfile
         public DbSet<User> Users { get; set; }
         public DbSet<AgentProfile> AgentProfiles { get; set; }
-        
+
         // NOTE for teammates: add your DbSet<T> properties below this line
         // e.g. public DbSet<Property> Properties { get; set; }
+
+        // Dev 2 - Property & PropertyType
+        public DbSet<Property> Properties { get; set; }
+        public DbSet<PropertyType> PropertyTypes { get; set; }
 
         // Dev 3 - Listing & Viewing
         public DbSet<Listing> Listings { get; set; }
@@ -42,6 +46,41 @@ namespace team6
                 .IsUnique();
 
             // NOTE for teammates: add your relationship configs below this line
+
+            // Dev 2 - Property -> PropertyType (many properties can share one type)
+            modelBuilder.Entity<Property>()
+                .HasOne(p => p.PropertyType)
+                .WithMany(pt => pt.Properties)
+                .HasForeignKey(p => p.PropertyTypeId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Dev 2 - Property -> City (many properties can be in one city)
+            modelBuilder.Entity<Property>()
+                .HasOne(p => p.City)
+                .WithMany()
+                .HasForeignKey(p => p.CityId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Dev 2 - Property -> User (the Agent responsible for the property)
+            modelBuilder.Entity<Property>()
+                .HasOne(p => p.Agent)
+                .WithMany()
+                .HasForeignKey(p => p.AgentId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Dev 2 - Property -> Listing (one property can have many listings over time)
+            modelBuilder.Entity<Listing>()
+                .HasOne(l => l.Property)
+                .WithMany(p => p.Listings)
+                .HasForeignKey(l => l.PropertyId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Dev 2 - Property -> Review (one property can have many reviews)
+            modelBuilder.Entity<Review>()
+                .HasOne(r => r.Property)
+                .WithMany(p => p.Reviews)
+                .HasForeignKey(r => r.PropertyId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             // Dev 5 - Contract -> User (many contracts can belong to one client)
             modelBuilder.Entity<Contract>()
@@ -81,8 +120,14 @@ namespace team6
                 .WithMany(c => c.Payments)
                 .HasForeignKey(p => p.ContractId)
                 .OnDelete(DeleteBehavior.Cascade);
-        }
 
+
+            // Dev 6 - City & Amenity
+            modelBuilder.Entity<City>();
+            modelBuilder.Entity<Amenity>();
+        }
+        
+        
             // Dev 6 - City & Amenity
         public DbSet<City> Cities { get; set; }
         public DbSet<Amenity> Amenities { get; set; }
