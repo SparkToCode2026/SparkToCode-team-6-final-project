@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using team6;
 
@@ -11,9 +12,11 @@ using team6;
 namespace team6.Migrations
 {
     [DbContext(typeof(ProjectContex))]
-    partial class ProjectContexModelSnapshot : ModelSnapshot
+    [Migration("20260812215304_Dev2AddPropertyAndPropertyType")]
+    partial class Dev2AddPropertyAndPropertyType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -116,8 +119,6 @@ namespace team6.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("ContractId");
-
-                    b.HasIndex("ListingId");
 
                     b.HasIndex("UserId");
 
@@ -376,12 +377,6 @@ namespace team6.Migrations
 
             modelBuilder.Entity("team6.Models.Contract", b =>
                 {
-                    b.HasOne("team6.Models.Listing", null)
-                        .WithMany("Contracts")
-                        .HasForeignKey("ListingId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("team6.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
@@ -504,8 +499,6 @@ namespace team6.Migrations
 
             modelBuilder.Entity("team6.Models.Listing", b =>
                 {
-                    b.Navigation("Contracts");
-
                     b.Navigation("Favorites");
 
                     b.Navigation("Viewings");

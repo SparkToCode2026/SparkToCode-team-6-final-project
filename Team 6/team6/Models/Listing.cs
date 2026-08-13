@@ -9,9 +9,15 @@ public class Listing
     public int ListingId { get; set; }
     
     public decimal Price { get; set; }
+dev2
+
+    public string Status { get; set; } = string.Empty;
+
+=======
  
     public string? Status { get; set; }   
     
+main
     public DateTime ListingDate { get; set; }
     
     [ForeignKey("Property")]

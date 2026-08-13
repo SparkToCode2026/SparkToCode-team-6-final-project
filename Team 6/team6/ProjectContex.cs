@@ -17,14 +17,20 @@ namespace team6
         // NOTE for teammates: add your DbSet<T> properties below this line
         // e.g. public DbSet<Property> Properties { get; set; }
 
+dev2
+=======
 
 
+main
         // Dev 2 - Property & PropertyType
         public DbSet<Property> Properties { get; set; }
         public DbSet<PropertyType> PropertyTypes { get; set; }
 
+dev2
+=======
 
 
+main
         // Dev 3 - Listing & Viewing
         public DbSet<Listing> Listings { get; set; }
         public DbSet<Viewing> Viewings { get; set; }
@@ -86,9 +92,12 @@ namespace team6
                 .HasForeignKey(r => r.PropertyId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+dev2
+=======
 
 
 
+main
             // Dev 5 - Contract -> User (many contracts can belong to one client)
             modelBuilder.Entity<Contract>()
                 .HasOne(c => c.User)
@@ -126,8 +135,14 @@ namespace team6
                 .WithMany(c => c.Payments)
                 .HasForeignKey(p => p.ContractId)
                 .OnDelete(DeleteBehavior.Cascade);
-        }
 
+
+            // Dev 6 - City & Amenity
+            modelBuilder.Entity<City>();
+            modelBuilder.Entity<Amenity>();
+        }
+        
+        
             // Dev 6 - City & Amenity
         public DbSet<City> Cities { get; set; }
         public DbSet<Amenity> Amenities { get; set; }
