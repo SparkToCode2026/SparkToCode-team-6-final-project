@@ -17,10 +17,20 @@ namespace team6
         // NOTE for teammates: add your DbSet<T> properties below this line
         // e.g. public DbSet<Property> Properties { get; set; }
 
+dev2
+=======
+
+
+main
         // Dev 2 - Property & PropertyType
         public DbSet<Property> Properties { get; set; }
         public DbSet<PropertyType> PropertyTypes { get; set; }
 
+dev2
+=======
+
+
+main
         // Dev 3 - Listing & Viewing
         public DbSet<Listing> Listings { get; set; }
         public DbSet<Viewing> Viewings { get; set; }
@@ -82,6 +92,12 @@ namespace team6
                 .HasForeignKey(r => r.PropertyId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+dev2
+=======
+
+
+
+main
             // Dev 5 - Contract -> User (many contracts can belong to one client)
             modelBuilder.Entity<Contract>()
                 .HasOne(c => c.User)
@@ -89,13 +105,12 @@ namespace team6
                 .HasForeignKey(c => c.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // TODO (Dev 5): uncomment once Dev 3's Listing.cs is merged
             // Dev 5 - Contract -> Listing (many contracts can reference one listing)
-            //modelBuilder.Entity<Contract>()
-            //.HasOne<Listing>()
-            //.WithMany(l => l.Contracts)
-            //.HasForeignKey(c => c.ListingId)
-            //.OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Contract>()
+                .HasOne<Listing>()
+                .WithMany(l => l.Contracts)
+                .HasForeignKey(c => c.ListingId)
+                .OnDelete(DeleteBehavior.Restrict);
             
             // Dev 3 - Viewing -> Listing (many viewings per listing)
             modelBuilder.Entity<Viewing>()
