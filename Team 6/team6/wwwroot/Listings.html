@@ -1,0 +1,387 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>PropTech - Listings</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <link href="/css/style.css"
+          rel="stylesheet">
+
+</head>
+
+
+<body>
+
+    <!-- Navbar -->
+
+    <div id="pt-navbar"></div>
+
+
+    <main class="container py-4">
+
+        <!-- Header -->
+
+        <div class="d-flex
+                    justify-content-between
+                    align-items-center
+                    flex-wrap
+                    gap-3
+                    mb-4">
+
+            <div>
+
+                <p class="eyebrow mb-2">
+                    PROPERTY MANAGEMENT
+                </p>
+
+                <h1 class="mb-1">
+                    Listings
+                </h1>
+
+                <p class="text-muted mb-0">
+                    Manage property listings and their availability.
+                </p>
+
+            </div>
+
+
+            <button type="button"
+                    class="btn btn-brick"
+                    id="add-listing-button">
+
+                + Add Listing
+
+            </button>
+
+        </div>
+
+
+        <!-- Listing Count -->
+
+        <div class="d-flex
+                    justify-content-between
+                    align-items-center
+                    mb-3">
+
+            <h5 class="mb-0">
+                Property Listings
+            </h5>
+
+            <span id="listing-count"
+                  class="text-muted">
+
+                0 listings
+
+            </span>
+
+        </div>
+
+
+        <!-- Loading -->
+
+        <div id="loading"
+             class="text-center py-5">
+
+            <div class="spinner-border"
+                 role="status">
+            </div>
+
+            <p class="text-muted mt-2">
+                Loading listings...
+            </p>
+
+        </div>
+
+
+        <!-- Listings -->
+
+        <div id="listing-grid"
+             class="row g-4">
+        </div>
+
+
+        <!-- Empty State -->
+
+        <div id="empty-state"
+             class="text-center py-5 d-none">
+
+            <h4>
+                No Listings Found
+            </h4>
+
+            <p class="text-muted">
+                Add a listing to get started.
+            </p>
+
+            <button type="button"
+                    class="btn btn-brick"
+                    id="empty-add-button">
+
+                + Add Listing
+
+            </button>
+
+        </div>
+
+    </main>
+
+
+    <!-- Add/Edit Listing Modal -->
+
+    <div class="modal fade"
+         id="listingModal"
+         tabindex="-1"
+         aria-hidden="true">
+
+        <div class="modal-dialog
+                   modal-dialog-centered">
+
+            <div class="modal-content">
+
+
+                <div class="modal-header">
+
+                    <h5 class="modal-title"
+                        id="modal-title">
+
+                        Add Listing
+
+                    </h5>
+
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal">
+                    </button>
+
+                </div>
+
+
+                <div class="modal-body">
+
+                    <form id="listing-form">
+
+                        <input type="hidden"
+                               id="listing-id">
+
+
+                        <!-- Property -->
+
+                        <div class="mb-3">
+
+                            <label for="property-id"
+                                   class="form-label">
+
+                                Property
+                                <span class="text-danger">*</span>
+
+                            </label>
+
+                            <select id="property-id"
+                                    class="form-select"
+                                    required>
+
+                                <option value="">
+                                    Select property
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- Price -->
+
+                        <div class="mb-3">
+
+                            <label for="price"
+                                   class="form-label">
+
+                                Listing Price
+                                <span class="text-danger">*</span>
+
+                            </label>
+
+                            <input type="number"
+                                   id="price"
+                                   class="form-control"
+                                   min="0"
+                                   step="0.01"
+                                   placeholder="Enter price"
+                                   required>
+
+                        </div>
+
+
+                        <!-- Status -->
+
+                        <div class="mb-3">
+
+                            <label for="status"
+                                   class="form-label">
+
+                                Status
+                                <span class="text-danger">*</span>
+
+                            </label>
+
+                            <select id="status"
+                                    class="form-select"
+                                    required>
+
+                                <option value="">
+                                    Select status
+                                </option>
+
+                                <option value="Available">
+                                    Available
+                                </option>
+
+                                <option value="Sold">
+                                    Sold
+                                </option>
+
+                                <option value="Rented">
+                                    Rented
+                                </option>
+
+                                <option value="Pending">
+                                    Pending
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- Error -->
+
+                        <div id="form-error"
+                             class="alert alert-danger d-none">
+                        </div>
+
+
+                        <!-- Buttons -->
+
+                        <div class="d-flex
+                                   justify-content-end
+                                   gap-2">
+
+                            <button type="button"
+                                    class="btn btn-secondary"
+                                    data-bs-dismiss="modal">
+
+                                Cancel
+
+                            </button>
+
+                            <button type="submit"
+                                    class="btn btn-brick"
+                                    id="save-listing-button">
+
+                                Save
+
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Delete Modal -->
+
+    <div class="modal fade"
+         id="deleteModal"
+         tabindex="-1"
+         aria-hidden="true">
+
+        <div class="modal-dialog
+                   modal-dialog-centered">
+
+            <div class="modal-content">
+
+
+                <div class="modal-header">
+
+                    <h5 class="modal-title">
+                        Delete Listing
+                    </h5>
+
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal">
+                    </button>
+
+                </div>
+
+
+                <div class="modal-body">
+
+                    <p>
+                        Are you sure you want to delete this listing?
+                    </p>
+
+                    <p class="text-danger mb-0">
+                        This action cannot be undone.
+                    </p>
+
+                </div>
+
+
+                <div class="modal-footer">
+
+                    <button type="button"
+                            class="btn btn-secondary"
+                            data-bs-dismiss="modal">
+
+                        Cancel
+
+                    </button>
+
+                    <button type="button"
+                            class="btn btn-danger"
+                            id="confirm-delete">
+
+                        Delete
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Scripts -->
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+    </script>
+
+    <script src="/js/auth.js"></script>
+
+    <script src="/js/api.js"></script>
+
+    <script src="/js/Listings.js"></script>
+
+</body>
+
+</html>
