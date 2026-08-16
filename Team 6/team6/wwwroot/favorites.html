@@ -1,0 +1,401 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Favorites</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f7fa;
+            margin: 0;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        h1 {
+            color: #1f2937;
+            margin-bottom: 25px;
+        }
+
+        .favorite-card {
+            background: #ffffff;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .favorite-info {
+            flex: 1;
+        }
+
+            .favorite-info h3 {
+                margin: 0 0 8px;
+                color: #1f2937;
+            }
+
+            .favorite-info p {
+                margin: 5px 0;
+                color: #6b7280;
+            }
+
+        .buttons {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            border: none;
+            border-radius: 6px;
+            padding: 10px 16px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+            button:hover {
+                opacity: 0.9;
+            }
+
+        .view-btn {
+            background: #2563eb;
+            color: white;
+        }
+
+        .delete-btn {
+            background: #dc2626;
+            color: white;
+        }
+
+        .message {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            color: #6b7280;
+            text-align: center;
+        }
+
+        .error-message {
+            color: #dc2626;
+        }
+
+        @media (max-width: 600px) {
+            .favorite-card {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .buttons {
+                width: 100%;
+            }
+
+            button {
+                flex: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>My Favorites</h1>
+
+        <div id="favoritesContainer">
+            <div class="message">
+                Loading favorites...
+            </div>
+        </div>
+
+    </div>
+
+
+    <script>
+
+        // =========================================================
+        // Configuration
+        // =========================================================
+
+        // Change this ID when testing with another user
+        const userId = 1;
+
+        const apiUrl = "/api/Favorite";
+
+
+        // =========================================================
+        // Load Favorites
+        // =========================================================
+
+        async function loadFavorites() {
+
+            const container =
+                document.getElementById("favoritesContainer");
+
+            // Prevent "possibly null" error
+            if (!container) {
+                console.error("favoritesContainer was not found.");
+                return;
+            }
+
+            try {
+
+                const response =
+                    await fetch(`${apiUrl}/user/${userId}`);
+
+                if (!response.ok) {
+                    throw new Error(
+                        `Failed to load favorites. Status: ${response.status}`
+                    );
+                }
+
+                /**
+                 * @type {Array<{
+                 *     favoriteId: number,
+                 *     listingId: number,
+                 *     listing?: {
+                 *         listingId: number
+                 *     } | null
+                 * }>}
+                 */
+                const favorites = await response.json();
+
+
+                // =================================================
+                // No Favorites
+                // =================================================
+
+                if (!Array.isArray(favorites) || favorites.length === 0) {
+
+                    container.innerHTML = `
+                        <div class="message">
+                            No favorite properties found.
+                        </div>
+                    `;
+
+                    return;
+                }
+
+
+                // =================================================
+                // Display Favorites
+                // =================================================
+
+                container.innerHTML = "";
+
+
+                favorites.forEach((favorite) => {
+
+                    // Listing can be null
+                    const listing = favorite.listing;
+
+                    const card =
+                        document.createElement("div");
+
+                    card.className = "favorite-card";
+
+
+                    // Determine listing title safely
+                    const listingTitle =
+                        listing && listing.listingId
+                            ? `Listing #${listing.listingId}`
+                            : `Favorite #${favorite.favoriteId}`;
+
+
+                    card.innerHTML = `
+
+                        <div class="favorite-info">
+
+                            <h3>
+                                ${listingTitle}
+                            </h3>
+
+                            <p>
+                                Favorite ID:
+                                ${favorite.favoriteId}
+                            </p>
+
+                            <p>
+                                Listing ID:
+                                ${favorite.listingId}
+                            </p>
+
+                        </div>
+
+
+                        <div class="buttons">
+
+                            <button
+                                type="button"
+                                class="view-btn"
+                                onclick="viewListing(${favorite.listingId})">
+
+                                View Property
+
+                            </button>
+
+
+                            <button
+                                type="button"
+                                class="delete-btn"
+                                onclick="deleteFavorite(${favorite.favoriteId})">
+
+                                Remove
+
+                            </button>
+
+                        </div>
+                    `;
+
+
+                    container.appendChild(card);
+
+                });
+
+            }
+            catch (error) {
+
+                console.error(
+                    "Error loading favorites:",
+                    error
+                );
+
+
+                container.innerHTML = `
+
+                    <div class="message error-message">
+
+                        Unable to load favorites.
+
+                    </div>
+
+                `;
+            }
+        }
+
+
+        // =========================================================
+        // View Property
+        // =========================================================
+
+function viewListing(listingId: number) {   
+
+            if (!listingId) {
+
+                alert("Invalid listing ID.");
+
+                return;
+            }
+
+
+            alert(
+                "Viewing Listing ID: " + listingId
+            );
+
+
+            // Later:
+            // window.location.href =
+            //     `/property-details.html?id=${listingId}`;
+        }
+
+
+        // =========================================================
+        // Delete Favorite
+        // =========================================================
+
+async function deleteFavorite(favoriteId: number) {
+
+            if (!favoriteId) {
+
+                alert("Invalid favorite ID.");
+
+                return;
+            }
+
+
+            const confirmDelete =
+                confirm(
+                    "Are you sure you want to remove this favorite?"
+                );
+
+
+            if (!confirmDelete) {
+                return;
+            }
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        `${apiUrl}/${favoriteId}`,
+                        {
+                            method: "DELETE"
+                        }
+                    );
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        `Failed to delete favorite. Status: ${response.status}`
+                    );
+                }
+
+
+                alert(
+                    "Favorite removed successfully."
+                );
+
+
+                // Refresh the favorites list
+                await loadFavorites();
+
+            }
+            catch (error) {
+
+                console.error(
+                    "Error deleting favorite:",
+                    error
+                );
+
+
+                alert(
+                    "Unable to remove favorite."
+                );
+            }
+        }
+
+
+        // =========================================================
+        // Start Page
+        // =========================================================
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function () {
+
+                loadFavorites();
+
+            }
+        );
+
+    </script>
+
+</body>
+</html>
