@@ -8,7 +8,7 @@
     <title>My Contracts</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    
+
     <style>
         * {
             box-sizing: border-box;
@@ -46,9 +46,9 @@
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
         }
 
-            .form-box h2 {
-                margin-top: 0;
-            }
+        .form-box h2 {
+            margin-top: 0;
+        }
 
         label {
             display: block;
@@ -66,11 +66,11 @@
             font-size: 14px;
         }
 
-            input:focus,
-            select:focus {
-                outline: none;
-                border-color: #2563eb;
-            }
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: #2563eb;
+        }
 
         button {
             border: none;
@@ -81,9 +81,9 @@
             font-size: 14px;
         }
 
-            button:hover {
-                opacity: 0.9;
-            }
+        button:hover {
+            opacity: 0.9;
+        }
 
         .add-btn {
             background: #2563eb;
@@ -92,6 +92,11 @@
 
         .edit-btn {
             background: #f59e0b;
+            color: white;
+        }
+
+        .cancel-btn {
+            background: #6b7280;
             color: white;
         }
 
@@ -136,6 +141,15 @@
             gap: 8px;
             flex-wrap: wrap;
             margin-top: 15px;
+            align-items: center;
+        }
+
+        .status-select {
+            width: auto;
+            padding: 8px 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
         }
 
         .message {
@@ -167,11 +181,13 @@
 
             .buttons {
                 flex-direction: column;
+                align-items: stretch;
             }
 
-                .buttons button {
-                    width: 100%;
-                }
+            .buttons button,
+            .buttons select {
+                width: 100%;
+            }
         }
     </style>
 
@@ -180,233 +196,237 @@
 
 <body>
 
-    <!-- Navbar -->
-    <header>
-        <nav class="navbar navbar-dark bg-dark">
-            <div class="container">
-    
-                <a class="navbar-brand" href="index.html">
-                    Real Estate Management
+<!-- Navbar -->
+<header>
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container">
+
+            <a class="navbar-brand" href="index.html">
+                Real Estate Management
+            </a>
+
+            <div>
+                <a class="btn btn-outline-light" href="index.html">
+                    Home
                 </a>
-    
-                <div>
-                    <a class="btn btn-outline-light" href="index.html">
-                        Home
-                    </a>
-                </div>
-    
-            </div>
-        </nav>
-    </header>
-
-    <div class="container">
-
-        <h1>My Contracts</h1>
-
-        <p class="subtitle">
-            Create, view, update and manage your contracts.
-        </p>
-
-
-        <!-- =========================================
-             CREATE CONTRACT
-        ========================================== -->
-
-        <div class="form-box">
-
-            <h2>Create Contract</h2>
-
-
-            <label for="listingId">
-                Listing ID
-            </label>
-
-            <input type="number"
-                   id="listingId"
-                   min="1"
-                   value="1">
-
-
-            <label for="userId">
-                User ID
-            </label>
-
-            <input type="number"
-                   id="userId"
-                   min="1"
-                   value="1">
-
-
-            <label for="signedDate">
-                Signed Date
-            </label>
-
-            <input type="date"
-                   id="signedDate">
-
-
-            <label for="status">
-                Status
-            </label>
-
-            <select id="status">
-
-                <option value="Pending">
-                    Pending
-                </option>
-
-                <option value="Active">
-                    Active
-                </option>
-
-                <option value="Completed">
-                    Completed
-                </option>
-
-                <option value="Cancelled">
-                    Cancelled
-                </option>
-
-            </select>
-
-
-            <button type="button"
-                    class="add-btn"
-                    id="createButton">
-                Create Contract
-            </button>
-
-        </div>
-
-
-        <!-- =========================================
-             CONTRACTS LIST
-        ========================================== -->
-
-        <h2>Contracts</h2>
-
-        <div id="contractsContainer">
-
-            <div class="message">
-                Loading contracts...
             </div>
 
         </div>
+    </nav>
+</header>
+
+<div class="container">
+
+    <h1>My Contracts</h1>
+
+    <p class="subtitle">
+        Create, view, update and manage your contracts.
+    </p>
+
+
+    <!-- =========================================
+         CREATE / EDIT CONTRACT
+    ========================================== -->
+
+    <div class="form-box">
+
+        <h2 id="formTitle">Create Contract</h2>
+
+        <input type="hidden" id="contractId">
+
+        <label for="listingId">
+            Listing ID
+        </label>
+
+        <input type="number"
+               id="listingId"
+               min="1"
+               value="1">
+
+
+        <label for="userId">
+            User ID
+        </label>
+
+        <input type="number"
+               id="userId"
+               min="1"
+               value="1">
+
+
+        <label for="signedDate">
+            Signed Date
+        </label>
+
+        <input type="date"
+               id="signedDate">
+
+
+        <label for="status">
+            Status
+        </label>
+
+        <select id="status">
+
+            <option value="Pending">
+                Pending
+            </option>
+
+            <option value="Signed">
+                Signed
+            </option>
+
+            <option value="Cancelled">
+                Cancelled
+            </option>
+
+        </select>
+
+
+        <button type="button"
+                class="add-btn"
+                id="createButton">
+            Create Contract
+        </button>
+
+        <button type="button"
+                class="cancel-btn"
+                id="cancelButton"
+                style="display: none;">
+            Cancel
+        </button>
 
     </div>
 
 
-    <script>
-        // @ts-nocheck
+    <!-- =========================================
+         CONTRACTS LIST
+    ========================================== -->
 
-        // =========================================
-        // API
-        // =========================================
+    <h2>Contracts</h2>
 
-        const apiUrl = "/api/Contracts";
+    <div id="contractsContainer">
+
+        <div class="message">
+            Loading contracts...
+        </div>
+
+    </div>
+
+</div>
 
 
-        // =========================================
-        // GET ELEMENT
-        // =========================================
+<script>
+    // @ts-nocheck
 
-        function getElement(id) {
+    // =========================================
+    // API
+    // =========================================
 
-            const element = document.getElementById(id);
+    const apiUrl = "/api/Contracts";
 
-            if (!element) {
-                throw new Error("Element not found: " + id);
-            }
 
-            return element;
+    // =========================================
+    // GET ELEMENT
+    // =========================================
+
+    function getElement(id) {
+
+        const element = document.getElementById(id);
+
+        if (!element) {
+            throw new Error("Element not found: " + id);
         }
 
+        return element;
+    }
 
-        // =========================================
-        // LOAD CONTRACTS
-        // =========================================
 
-        async function loadContracts() {
+    // =========================================
+    // LOAD CONTRACTS
+    // =========================================
 
-            const container =
-                document.getElementById("contractsContainer");
+    async function loadContracts() {
 
-            if (!container) {
+        const container =
+            document.getElementById("contractsContainer");
+
+        if (!container) {
+            return;
+        }
+
+        container.innerHTML =
+            '<div class="message">Loading contracts...</div>';
+
+
+        try {
+
+            const response =
+                await fetch(apiUrl);
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Failed to load contracts. Status: " +
+                    response.status
+                );
+
+            }
+
+
+            const contracts =
+                await response.json();
+
+
+            if (
+                !Array.isArray(contracts) ||
+                contracts.length === 0
+            ) {
+
+                container.innerHTML =
+                    '<div class="message">' +
+                    'No contracts found.' +
+                    '</div>';
+
                 return;
             }
 
-            container.innerHTML =
-                '<div class="message">Loading contracts...</div>';
+
+            container.innerHTML = "";
 
 
-            try {
+            contracts.forEach(function (contract) {
 
-                const response =
-                    await fetch(apiUrl);
-
-
-                if (!response.ok) {
-
-                    throw new Error(
-                        "Failed to load contracts. Status: " +
-                        response.status
-                    );
-
-                }
+                const card =
+                    document.createElement("div");
 
 
-                const contracts =
-                    await response.json();
+                card.className =
+                    "contract-card";
 
 
-                if (
-                    !Array.isArray(contracts) ||
-                    contracts.length === 0
-                ) {
-
-                    container.innerHTML =
-                        '<div class="message">' +
-                        'No contracts found.' +
-                        '</div>';
-
-                    return;
-                }
+                const contractId =
+                    Number(contract.contractId) || 0;
 
 
-                container.innerHTML = "";
+                const listingId =
+                    Number(contract.listingId) || 0;
 
 
-                contracts.forEach(function (contract) {
-
-                    const card =
-                        document.createElement("div");
+                const userId =
+                    Number(contract.userId) || 0;
 
 
-                    card.className =
-                        "contract-card";
+                const status =
+                    contract.status || "Pending";
 
 
-                    const contractId =
-                        Number(contract.contractId) || 0;
+                const signedDate =
+                    formatDate(contract.signedDate);
 
 
-                    const listingId =
-                        Number(contract.listingId) || 0;
-
-
-                    const userId =
-                        Number(contract.userId) || 0;
-
-
-                    const status =
-                        contract.status || "Pending";
-
-
-                    const signedDate =
-                        formatDate(contract.signedDate);
-
-
-                    card.innerHTML = `
+                card.innerHTML = `
 
                         <div class="contract-header">
 
@@ -443,17 +463,7 @@
 
                         </div>
 
-
                         <div class="buttons">
-
-                            <button
-                                type="button"
-                                class="status-btn"
-                                onclick="changeStatus(${contractId})"
-                            >
-                                Change Status
-                            </button>
-
 
                             <button
                                 type="button"
@@ -473,579 +483,499 @@
                             </button>
 
                         </div>
-
+                        
                     `;
 
 
-                    container.appendChild(card);
+                container.appendChild(card);
 
-                });
+            });
 
-            }
-            catch (error) {
+        }
+        catch (error) {
 
-                console.error(
-                    "Error loading contracts:",
-                    error
-                );
+            console.error(
+                "Error loading contracts:",
+                error
+            );
 
 
-                container.innerHTML =
-                    '<div class="message error">' +
-                    'Unable to load contracts.' +
-                    '</div>';
-            }
+            container.innerHTML =
+                '<div class="message error">' +
+                'Unable to load contracts.' +
+                '</div>';
+        }
+    }
+
+
+    // =========================================
+    // CREATE OR UPDATE CONTRACT
+    // =========================================
+
+    async function createContract() {
+
+        const contractIdValue =
+            getElement("contractId").value;
+
+        const isEditing =
+            contractIdValue !== "";
+
+        const listingId =
+            Number(
+                getElement("listingId").value
+            );
+
+
+        const userId =
+            Number(
+                getElement("userId").value
+            );
+
+
+        const signedDate =
+            getElement("signedDate").value;
+
+
+        const status =
+            getElement("status").value;
+
+
+        if (
+            !listingId ||
+            !userId ||
+            !signedDate
+        ) {
+
+            alert(
+                "Please enter Listing ID, User ID and Signed Date."
+            );
+
+            return;
         }
 
 
-        // =========================================
-        // CREATE CONTRACT
-        // =========================================
+        const contract = {
 
-        async function createContract() {
+            listingId: listingId,
 
-            const listingId =
-                Number(
-                    getElement("listingId").value
-                );
+            userId: userId,
 
+            signedDate: signedDate,
 
-            const userId =
-                Number(
-                    getElement("userId").value
-                );
+            status: status
 
+        };
 
-            const signedDate =
-                getElement("signedDate").value;
-
-
-            const status =
-                getElement("status").value;
-
-
-            if (
-                !listingId ||
-                !userId ||
-                !signedDate
-            ) {
-
-                alert(
-                    "Please enter Listing ID, User ID and Signed Date."
-                );
-
-                return;
-            }
-
-
-            const contract = {
-
-                listingId: listingId,
-
-                userId: userId,
-
-                signedDate: signedDate,
-
-                status: status
-
-            };
-
-
-            try {
-
-                const response =
-                    await fetch(
-                        apiUrl,
-                        {
-
-                            method: "POST",
-
-                            headers: {
-                                "Content-Type":
-                                    "application/json"
-                            },
-
-                            body:
-                                JSON.stringify(contract)
-
-                        }
-                    );
-
-
-                if (!response.ok) {
-
-                    const errorText =
-                        await response.text();
-
-                    throw new Error(
-                        errorText ||
-                        "Failed to create contract."
-                    );
-                }
-
-
-                alert(
-                    "Contract created successfully."
-                );
-
-
-                await loadContracts();
-
-
-            }
-            catch (error) {
-
-                console.error(
-                    "Error creating contract:",
-                    error
-                );
-
-
-                alert(
-                    "Unable to create contract." + error.message
-                );
-            }
+        if (isEditing) {
+            contract.contractId = Number(contractIdValue);
         }
 
 
-        // =========================================
-        // CHANGE STATUS
-        // =========================================
+        try {
 
-        async function changeStatus(contractId) {
+            const response =
+                await fetch(
+                    isEditing ? (apiUrl + "/" + contractIdValue) : apiUrl,
+                    {
 
-            const newStatus =
-                prompt(
-                    "Enter new status:",
-                    "Active"
+                        method: isEditing ? "PUT" : "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body:
+                            JSON.stringify(contract)
+
+                    }
                 );
 
 
-            if (!newStatus) {
-                return;
-            }
+            if (!response.ok) {
 
+                const errorText =
+                    await response.text();
 
-            const status =
-                newStatus.trim();
-
-
-            if (!status) {
-                return;
-            }
-
-
-            try {
-
-                const url =
-                    apiUrl +
-                    "/" +
-                    contractId +
-                    "/status?status=" +
-                    encodeURIComponent(status);
-
-
-                const response =
-                    await fetch(
-                        url,
-                        {
-                            method: "PATCH"
-                        }
-                    );
-
-
-                if (!response.ok) {
-
-                    const errorText =
-                        await response.text();
-
-                    throw new Error(
-                        errorText ||
-                        "Failed to change status."
-                    );
-                }
-
-
-                alert(
-                    "Contract status updated successfully."
-                );
-
-
-                await loadContracts();
-
-            }
-            catch (error) {
-
-                console.error(
-                    "Error changing status:",
-                    error
-                );
-
-
-                alert(
-                    "Unable to change contract status."
+                throw new Error(
+                    errorText ||
+                    "Failed to save contract."
                 );
             }
+
+
+            alert(
+                isEditing
+                    ? "Contract updated successfully."
+                    : "Contract created successfully."
+            );
+
+
+            clearForm();
+
+            await loadContracts();
+
+
         }
+        catch (error) {
 
+            console.error(
+                "Error saving contract:",
+                error
+            );
 
-        // =========================================
-        // EDIT CONTRACT
-        // =========================================
 
-        async function editContract(contractId) {
-
-            try {
-
-                // Get the existing contract first
-                const getResponse =
-                    await fetch(
-                        apiUrl +
-                        "/" +
-                        contractId
-                    );
-
-
-                if (!getResponse.ok) {
-
-                    throw new Error(
-                        "Contract not found."
-                    );
-                }
-
-
-                const contract =
-                    await getResponse.json();
-
-
-                // Ask for new values
-                const listingId =
-                    prompt(
-                        "Enter Listing ID:",
-                        contract.listingId || ""
-                    );
-
-
-                if (listingId === null) {
-                    return;
-                }
-
-
-                const userId =
-                    prompt(
-                        "Enter User ID:",
-                        contract.userId || ""
-                    );
-
-
-                if (userId === null) {
-                    return;
-                }
-
-
-                const signedDate =
-                    prompt(
-                        "Enter Signed Date (YYYY-MM-DD):",
-                        formatDateForInput(
-                            contract.signedDate
-                        )
-                    );
-
-
-                if (signedDate === null) {
-                    return;
-                }
-
-
-                const status =
-                    prompt(
-                        "Enter Status:",
-                        contract.status || "Pending"
-                    );
-
-
-                if (status === null) {
-                    return;
-                }
-
-
-                if (
-                    !Number(listingId) ||
-                    !Number(userId) ||
-                    !signedDate
-                ) {
-
-                    alert(
-                        "Please enter valid contract information."
-                    );
-
-                    return;
-                }
-
-
-                const updatedContract = {
-
-                    contractId:
-                        contractId,
-
-                    listingId:
-                        Number(listingId),
-
-                    userId:
-                        Number(userId),
-
-                    signedDate:
-                        signedDate,
-
-                    status:
-                        status.trim()
-
-                };
-
-
-                const response =
-                    await fetch(
-                        apiUrl +
-                        "/" +
-                        contractId,
-                        {
-
-                            method: "PUT",
-
-                            headers: {
-                                "Content-Type":
-                                    "application/json"
-                            },
-
-                            body:
-                                JSON.stringify(
-                                    updatedContract
-                                )
-
-                        }
-                    );
-
-
-                if (!response.ok) {
-
-                    const errorText =
-                        await response.text();
-
-                    throw new Error(
-                        errorText ||
-                        "Failed to update contract."
-                    );
-                }
-
-
-                alert(
-                    "Contract updated successfully."
-                );
-
-
-                await loadContracts();
-
-            }
-            catch (error) {
-
-                console.error(
-                    "Error updating contract:",
-                    error
-                );
-
-
-                alert(
-                    "Unable to update contract."
-                );
-            }
-        }
-
-
-        // =========================================
-        // DELETE CONTRACT
-        // =========================================
-
-        async function deleteContract(contractId) {
-
-            const confirmed =
-                confirm(
-                    "Are you sure you want to delete this contract?"
-                );
-
-
-            if (!confirmed) {
-                return;
-            }
-
-
-            try {
-
-                const response =
-                    await fetch(
-                        apiUrl +
-                        "/" +
-                        contractId,
-                        {
-                            method: "DELETE"
-                        }
-                    );
-
-
-                if (!response.ok) {
-
-                    const errorText =
-                        await response.text();
-
-                    throw new Error(
-                        errorText ||
-                        "Failed to delete contract."
-                    );
-                }
-
-
-                alert(
-                    "Contract deleted successfully."
-                );
-
-
-                await loadContracts();
-
-            }
-            catch (error) {
-
-                console.error(
-                    "Error deleting contract:",
-                    error
-                );
-
-
-                alert(
-                    "Unable to delete contract."
-                );
-            }
-        }
-
-
-        // =========================================
-        // FORMAT DATE
-        // =========================================
-
-        function formatDate(dateValue) {
-
-            if (!dateValue) {
-                return "Not available";
-            }
-
-
-            const date =
-                new Date(dateValue);
-
-
-            if (isNaN(date.getTime())) {
-                return String(dateValue);
-            }
-
-
-            return date.toLocaleDateString();
-        }
-
-
-        // =========================================
-        // FORMAT DATE FOR INPUT
-        // =========================================
-
-        function formatDateForInput(dateValue) {
-
-            if (!dateValue) {
-                return "";
-            }
-
-
-            const date =
-                new Date(dateValue);
-
-
-            if (isNaN(date.getTime())) {
-
-                return String(dateValue)
-                    .substring(0, 10);
-            }
-
-
-            const year =
-                date.getFullYear();
-
-
-            const month =
-                String(
-                    date.getMonth() + 1
-                ).padStart(2, "0");
-
-
-            const day =
-                String(
-                    date.getDate()
-                ).padStart(2, "0");
-
-
-            return (
-                year +
-                "-" +
-                month +
-                "-" +
-                day
+            alert(
+                "Unable to save contract: " + error.message
             );
         }
+    }
 
 
-        // =========================================
-        // ESCAPE HTML
-        // =========================================
+    // =========================================
+    // CLEAR / RESET FORM
+    // =========================================
 
-        function escapeHtml(text) {
+    function clearForm() {
 
-            const div =
-                document.createElement("div");
+        getElement("contractId").value = "";
+        getElement("listingId").value = "1";
+        getElement("userId").value = "1";
+        getElement("signedDate").value = "";
+        getElement("status").value = "Pending";
+
+        getElement("formTitle").textContent = "Create Contract";
+        getElement("createButton").textContent = "Create Contract";
+        getElement("cancelButton").style.display = "none";
+    }
 
 
-            div.textContent =
-                text;
+    // =========================================
+    // CHANGE STATUS (inline dropdown per card)
+    // =========================================
+
+    async function changeStatus(contractId) {
+
+        const select =
+            document.getElementById("status-select-" + contractId);
+
+        const status = select.value;
 
 
-            return div.innerHTML;
+        try {
+
+            const url =
+                apiUrl +
+                "/" +
+                contractId +
+                "/status";
+
+
+            const response =
+                await fetch(
+                    url,
+                    {
+                        method: "PUT",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(status)
+                    }
+                );
+
+
+            if (!response.ok) {
+
+                const errorText =
+                    await response.text();
+
+                throw new Error(
+                    errorText ||
+                    "Failed to change status."
+                );
+            }
+
+
+            alert(
+                "Contract status updated successfully."
+            );
+
+
+            await loadContracts();
+
+        }
+        catch (error) {
+
+            console.error(
+                "Error changing status:",
+                error
+            );
+
+
+            alert(
+                "Unable to change contract status: " + error.message
+            );
+        }
+    }
+
+
+    // =========================================
+    // EDIT CONTRACT (fills the top form)
+    // =========================================
+
+    async function editContract(contractId) {
+
+        try {
+
+            const getResponse =
+                await fetch(
+                    apiUrl +
+                    "/" +
+                    contractId
+                );
+
+
+            if (!getResponse.ok) {
+
+                throw new Error(
+                    "Contract not found."
+                );
+            }
+
+
+            const contract =
+                await getResponse.json();
+
+
+            getElement("contractId").value = contractId;
+            getElement("listingId").value = contract.listingId;
+            getElement("userId").value = contract.userId;
+            getElement("signedDate").value = formatDateForInput(contract.signedDate);
+            getElement("status").value = contract.status;
+
+            getElement("formTitle").textContent = "Edit Contract";
+            getElement("createButton").textContent = "Update Contract";
+            getElement("cancelButton").style.display = "inline-block";
+
+            window.scrollTo({ top: 0, behavior: "smooth" });
+
+        }
+        catch (error) {
+
+            console.error(
+                "Error loading contract for edit:",
+                error
+            );
+
+
+            alert(
+                "Unable to load contract for editing."
+            );
+        }
+    }
+
+
+    // =========================================
+    // DELETE CONTRACT
+    // =========================================
+
+    async function deleteContract(contractId) {
+
+        const confirmed =
+            confirm(
+                "Are you sure you want to delete this contract?"
+            );
+
+
+        if (!confirmed) {
+            return;
         }
 
 
-        // =========================================
-        // PAGE START
-        // =========================================
+        try {
 
-        document.addEventListener(
-            "DOMContentLoaded",
-            function () {
-
-                const createButton =
-                    document.getElementById(
-                        "createButton"
-                    );
-
-
-                if (createButton) {
-
-                    createButton.addEventListener(
-                        "click",
-                        createContract
-                    );
-
-                }
+            const response =
+                await fetch(
+                    apiUrl +
+                    "/" +
+                    contractId,
+                    {
+                        method: "DELETE"
+                    }
+                );
 
 
-                loadContracts();
+            if (!response.ok) {
+
+                const errorText =
+                    await response.text();
+
+                throw new Error(
+                    errorText ||
+                    "Failed to delete contract."
+                );
+            }
+
+
+            alert(
+                "Contract deleted successfully."
+            );
+
+
+            await loadContracts();
+
+        }
+        catch (error) {
+
+            console.error(
+                "Error deleting contract:",
+                error
+            );
+
+
+            alert(
+                "Unable to delete contract."
+            );
+        }
+    }
+
+
+    // =========================================
+    // FORMAT DATE
+    // =========================================
+
+    function formatDate(dateValue) {
+
+        if (!dateValue) {
+            return "Not available";
+        }
+
+
+        const date =
+            new Date(dateValue);
+
+
+        if (isNaN(date.getTime())) {
+            return String(dateValue);
+        }
+
+
+        return date.toLocaleDateString();
+    }
+
+
+    // =========================================
+    // FORMAT DATE FOR INPUT
+    // =========================================
+
+    function formatDateForInput(dateValue) {
+
+        if (!dateValue) {
+            return "";
+        }
+
+
+        const date =
+            new Date(dateValue);
+
+
+        if (isNaN(date.getTime())) {
+
+            return String(dateValue)
+                .substring(0, 10);
+        }
+
+
+        const year =
+            date.getFullYear();
+
+
+        const month =
+            String(
+                date.getMonth() + 1
+            ).padStart(2, "0");
+
+
+        const day =
+            String(
+                date.getDate()
+            ).padStart(2, "0");
+
+
+        return (
+            year +
+            "-" +
+            month +
+            "-" +
+            day
+        );
+    }
+
+
+    // =========================================
+    // ESCAPE HTML
+    // =========================================
+
+    function escapeHtml(text) {
+
+        const div =
+            document.createElement("div");
+
+
+        div.textContent =
+            text;
+
+
+        return div.innerHTML;
+    }
+
+
+    // =========================================
+    // PAGE START
+    // =========================================
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        function () {
+
+            const createButton =
+                document.getElementById(
+                    "createButton"
+                );
+
+
+            if (createButton) {
+
+                createButton.addEventListener(
+                    "click",
+                    createContract
+                );
 
             }
-        );
 
-    </script>
+
+            const cancelButton =
+                document.getElementById(
+                    "cancelButton"
+                );
+
+
+            if (cancelButton) {
+
+                cancelButton.addEventListener(
+                    "click",
+                    clearForm
+                );
+
+            }
+
+
+            loadContracts();
+
+        }
+    );
+
+</script>
 
 </body>
 
