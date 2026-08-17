@@ -55,6 +55,7 @@ async function loadProperties() {
     const grid = document.getElementById("property-grid");
 
     grid.innerHTML = "";
+    document.getElementById("loading").style.display = "none";
 
     const cityId =
         document.getElementById("filter-city").value;
