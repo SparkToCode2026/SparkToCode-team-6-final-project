@@ -17,6 +17,10 @@ namespace team6
         // NOTE for teammates: add your DbSet<T> properties below this line
         // e.g. public DbSet<Property> Properties { get; set; }
 
+        // Dev 4 - Favorite & Review
+        public DbSet<Favorite> Favorites { get; set; }
+        public DbSet<Review> Reviews { get; set; }
+
 
 
 
@@ -54,6 +58,37 @@ namespace team6
                 .IsUnique();
 
             // NOTE for teammates: add your relationship configs below this line
+
+
+            // Dev 4 - Favorite -> User
+            modelBuilder.Entity<Favorite>()
+                .HasOne(f => f.User)
+                .WithMany()
+                .HasForeignKey(f => f.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Dev 4 - Favorite -> Listing
+            modelBuilder.Entity<Favorite>()
+                .HasOne(f => f.Listing)
+                .WithMany()
+                .HasForeignKey(f => f.ListingId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Dev 4 - Review -> User
+            modelBuilder.Entity<Review>()
+                .HasOne(r => r.User)
+                .WithMany()
+                .HasForeignKey(r => r.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Dev 4 - Review -> Property
+            modelBuilder.Entity<Review>()
+                .HasOne(r => r.Property)
+                .WithMany()
+                .HasForeignKey(r => r.PropertyId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+
 
             // Dev 2 - Property -> PropertyType (many properties can share one type)
             modelBuilder.Entity<Property>()

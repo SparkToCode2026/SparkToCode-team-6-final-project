@@ -1,0 +1,1239 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Property Reviews</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 30px;
+            font-family: Arial, sans-serif;
+            background: #f5f7fa;
+            color: #1f2937;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        h1 {
+            margin-bottom: 25px;
+        }
+
+        .form-card,
+        .review-card,
+        .message,
+        .average-card {
+            background: #ffffff;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+            .form-card h2 {
+                margin-top: 0;
+            }
+
+        label {
+            display: block;
+            margin-top: 12px;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        button {
+            border: none;
+            border-radius: 6px;
+            padding: 10px 16px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 15px;
+            margin-right: 8px;
+        }
+
+            button:hover {
+                opacity: 0.9;
+            }
+
+        .primary-btn {
+            background: #2563eb;
+            color: white;
+        }
+
+        .edit-btn {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .delete-btn {
+            background: #dc2626;
+            color: white;
+        }
+
+        .cancel-btn {
+            background: #6b7280;
+            color: white;
+        }
+
+        .rating {
+            color: #f59e0b;
+            font-size: 20px;
+            margin: 8px 0;
+        }
+
+        .review-info {
+            color: #6b7280;
+            font-size: 14px;
+            margin: 5px 0;
+        }
+
+        .comment {
+            margin-top: 12px;
+            color: #374151;
+        }
+
+        .average-card {
+            background: #eef2ff;
+        }
+
+        .average-number {
+            font-size: 30px;
+            font-weight: bold;
+            color: #2563eb;
+        }
+
+        .error-message {
+            color: #dc2626;
+            margin-top: 10px;
+        }
+
+        .success-message {
+            color: #16a34a;
+            margin-top: 10px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .buttons {
+            margin-top: 10px;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>Property Reviews</h1>
+
+        <!-- Review Form -->
+
+        <div class="form-card">
+
+            <h2 id="formTitle">Add Review</h2>
+
+            <input type="hidden" id="reviewId">
+
+            <label for="userId">
+                User ID
+            </label>
+
+            <input type="number"
+                   id="userId"
+                   value="1"
+                   min="1">
+
+            <label for="propertyId">
+                Property ID
+            </label>
+
+            <input type="number"
+                   id="propertyId"
+                   value="1"
+                   min="1">
+
+            <label for="rating">
+                Rating
+            </label>
+
+            <select id="rating">
+                <option value="1">1 Star</option>
+                <option value="2">2 Stars</option>
+                <option value="3">3 Stars</option>
+                <option value="4">4 Stars</option>
+                <option value="5" selected>5 Stars</option>
+            </select>
+
+            <label for="comment">
+                Comment
+            </label>
+
+            <textarea id="comment"
+                      placeholder="Write your review..."></textarea>
+
+            <button type="button"
+                    class="primary-btn"
+                    id="saveButton">
+                Add Review
+            </button>
+
+            <button type="button"
+                    class="cancel-btn hidden"
+                    id="cancelButton">
+                Cancel
+            </button>
+
+            <div id="formMessage"></div>
+
+        </div>
+
+
+        <!-- Average Rating -->
+
+        <div class="average-card">
+
+            <h2>Average Rating</h2>
+
+            <div id="averageRating"
+                 class="average-number">
+                -
+            </div>
+
+        </div>
+
+
+        <!-- Reviews -->
+
+        <h2>All Reviews</h2>
+
+        <div id="reviewsContainer">
+
+            <div class="message">
+                Loading reviews...
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+// Disable Visual Studio TypeScript checking for this HTML file.
+// The browser will still run the JavaScript normally.
+// @ts-nocheck
+
+
+// =========================================================
+// API
+// =========================================================
+
+const apiUrl = "/api/Review";
+
+
+// =========================================================
+// Get Elements
+// =========================================================
+
+function getElement(id) {
+
+    return document.getElementById(id);
+
+}
+
+
+// =========================================================
+// Get Input
+// =========================================================
+
+function getInput(id) {
+
+    const element = document.getElementById(id);
+
+    if (!element) {
+        return null;
+    }
+
+    return element;
+
+}
+
+
+// =========================================================
+// Show Message
+// =========================================================
+
+function showMessage(message, isError) {
+
+    const element = getElement("formMessage");
+
+    if (!element) {
+        return;
+    }
+
+    element.textContent = message;
+
+    if (isError) {
+        element.className = "error-message";
+    }
+    else {
+        element.className = "success-message";
+    }
+
+    setTimeout(function () {
+
+        element.textContent = "";
+        element.className = "";
+
+    }, 3000);
+}
+
+
+// =========================================================
+// Escape HTML
+// =========================================================
+
+function escapeHtml(text) {
+
+    const div = document.createElement("div");
+
+    div.textContent = text;
+
+    return div.innerHTML;
+}
+
+
+// =========================================================
+// Load Reviews
+// =========================================================
+
+async function loadReviews() {
+
+    const container = getElement("reviewsContainer");
+
+    if (!container) {
+        return;
+    }
+
+    container.innerHTML =
+        '<div class="message">Loading reviews...</div>';
+
+    try {
+
+        const response = await fetch(apiUrl);
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Failed to load reviews. Status: " +
+                response.status
+            );
+
+        }
+
+        const reviews = await response.json();
+
+        if (!Array.isArray(reviews) || reviews.length === 0) {
+
+            container.innerHTML =
+                '<div class="message">No reviews found.</div>';
+
+            return;
+        }
+
+        container.innerHTML = "";
+
+        reviews.forEach(function (review) {
+
+            const card =
+                document.createElement("div");
+
+            card.className = "review-card";
+
+            const reviewId =
+                Number(review.reviewId) || 0;
+
+            const rating =
+                Number(review.rating) || 0;
+
+            const userId =
+                Number(review.userId) || 0;
+
+            const propertyId =
+                Number(review.propertyId) || 0;
+
+            const comment =
+                review.comment || "No comment provided.";
+
+            let stars = "";
+
+            for (let i = 1; i <= 5; i++) {
+
+                if (i <= rating) {
+                    stars += "★";
+                }
+                else {
+                    stars += "☆";
+                }
+
+            }
+
+            card.innerHTML =
+
+                "<h3>Review #" +
+                reviewId +
+                "</h3>" +
+
+                "<div class='rating'>" +
+                stars +
+                "</div>" +
+
+                "<p class='review-info'>" +
+                "Rating: " +
+                rating +
+                "/5" +
+                "</p>" +
+
+                "<p class='review-info'>" +
+                "Property ID: " +
+                propertyId +
+                "</p>" +
+
+                "<p class='review-info'>" +
+                "User ID: " +
+                userId +
+                "</p>" +
+
+                "<p class='comment'>" +
+                escapeHtml(String(comment)) +
+                "</p>" +
+
+                "<div class='buttons'>" +
+
+                "<button " +
+                "type='button' " +
+                "class='edit-btn' " +
+                "data-action='edit' " +
+                "data-id='" +
+                reviewId +
+                "'>" +
+                "Edit" +
+                "</button>" +
+
+                "<button " +
+                "type='button' " +
+                "class='delete-btn' " +
+                "data-action='delete' " +
+                "data-id='" +
+                reviewId +
+                "'>" +
+                "Delete" +
+                "</button>" +
+
+                "</div>";
+
+            container.appendChild(card);
+
+        });
+
+    }
+    catch (error) {
+
+        console.error(
+            "Error loading reviews:",
+            error
+        );
+
+        container.innerHTML =
+            '<div class="message error-message">' +
+            'Unable to load reviews.' +
+            '</div>';
+
+    }
+
+}
+
+
+// =========================================================
+// Load Average Rating
+// =========================================================
+
+async function loadAverageRating() {
+
+    const propertyInput =
+        getInput("propertyId");
+
+    const averageElement =
+        getElement("averageRating");
+
+    if (!propertyInput || !averageElement) {
+        return;
+    }
+
+    const propertyId =
+        Number(propertyInput.value);
+
+    if (!propertyId) {
+
+        averageElement.textContent = "-";
+
+        return;
+    }
+
+    try {
+
+        const response =
+            await fetch(
+                apiUrl +
+                "/average/" +
+                propertyId
+            );
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Failed to load average rating."
+            );
+
+        }
+
+        const average =
+            await response.json();
+
+        const numericAverage =
+            Number(average) || 0;
+
+        averageElement.textContent =
+            numericAverage.toFixed(1) +
+            " / 5";
+
+    }
+    catch (error) {
+
+        console.error(
+            "Error loading average:",
+            error
+        );
+
+        averageElement.textContent = "-";
+
+    }
+
+}
+
+
+// =========================================================
+// Create Review
+// =========================================================
+
+async function createReview() {
+
+    const userInput =
+        getInput("userId");
+
+    const propertyInput =
+        getInput("propertyId");
+
+    const ratingInput =
+        getInput("rating");
+
+    const commentInput =
+        getInput("comment");
+
+    if (
+        !userInput ||
+        !propertyInput ||
+        !ratingInput ||
+        !commentInput
+    ) {
+        return;
+    }
+
+    const userId =
+        Number(userInput.value);
+
+    const propertyId =
+        Number(propertyInput.value);
+
+    const rating =
+        Number(ratingInput.value);
+
+    const comment =
+        commentInput.value.trim();
+
+    if (!userId || !propertyId) {
+
+        showMessage(
+            "Please enter User ID and Property ID.",
+            true
+        );
+
+        return;
+    }
+
+    if (rating < 1 || rating > 5) {
+
+        showMessage(
+            "Rating must be between 1 and 5.",
+            true
+        );
+
+        return;
+    }
+
+    const review = {
+
+        userId: userId,
+
+        propertyId: propertyId,
+
+        rating: rating,
+
+        comment: comment || null
+
+    };
+
+    try {
+
+        const response =
+            await fetch(
+                apiUrl,
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:
+                        JSON.stringify(review)
+                }
+            );
+
+        if (!response.ok) {
+
+            const text =
+                await response.text();
+
+            throw new Error(
+                text ||
+                "Failed to create review."
+            );
+
+        }
+
+        showMessage(
+            "Review added successfully.",
+            false
+        );
+
+        clearForm();
+
+        await loadReviews();
+
+        await loadAverageRating();
+
+    }
+    catch (error) {
+
+        console.error(
+            "Error creating review:",
+            error
+        );
+
+        showMessage(
+            "Unable to create review.",
+            true
+        );
+
+    }
+
+}
+
+
+// =========================================================
+// Edit Review
+// =========================================================
+
+async function editReview(reviewId) {
+
+    const id =
+        Number(reviewId);
+
+    if (!id) {
+
+        alert("Invalid review ID.");
+
+        return;
+    }
+
+    try {
+
+        const response =
+            await fetch(
+                apiUrl + "/" + id
+            );
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Review not found."
+            );
+
+        }
+
+        const review =
+            await response.json();
+
+        const reviewInput =
+            getInput("reviewId");
+
+        const userInput =
+            getInput("userId");
+
+        const propertyInput =
+            getInput("propertyId");
+
+        const ratingInput =
+            getInput("rating");
+
+        const commentInput =
+            getInput("comment");
+
+        const formTitle =
+            getElement("formTitle");
+
+        const saveButton =
+            getElement("saveButton");
+
+        const cancelButton =
+            getElement("cancelButton");
+
+        if (
+            !reviewInput ||
+            !userInput ||
+            !propertyInput ||
+            !ratingInput ||
+            !commentInput ||
+            !formTitle ||
+            !saveButton ||
+            !cancelButton
+        ) {
+            return;
+        }
+
+        reviewInput.value =
+            String(review.reviewId);
+
+        userInput.value =
+            String(review.userId || 1);
+
+        propertyInput.value =
+            String(review.propertyId || 1);
+
+        ratingInput.value =
+            String(review.rating || 1);
+
+        commentInput.value =
+            review.comment || "";
+
+        formTitle.textContent =
+            "Edit Review";
+
+        saveButton.textContent =
+            "Update Review";
+
+        cancelButton.classList.remove(
+            "hidden"
+        );
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+
+    }
+    catch (error) {
+
+        console.error(
+            "Error loading review:",
+            error
+        );
+
+        alert(
+            "Unable to load review."
+        );
+
+    }
+
+}
+
+
+// =========================================================
+// Update Review
+// =========================================================
+
+async function updateReview() {
+
+    const reviewInput =
+        getInput("reviewId");
+
+    const userInput =
+        getInput("userId");
+
+    const propertyInput =
+        getInput("propertyId");
+
+    const ratingInput =
+        getInput("rating");
+
+    const commentInput =
+        getInput("comment");
+
+    if (
+        !reviewInput ||
+        !userInput ||
+        !propertyInput ||
+        !ratingInput ||
+        !commentInput
+    ) {
+        return;
+    }
+
+    const reviewId =
+        Number(reviewInput.value);
+
+    const userId =
+        Number(userInput.value);
+
+    const propertyId =
+        Number(propertyInput.value);
+
+    const rating =
+        Number(ratingInput.value);
+
+    const comment =
+        commentInput.value.trim();
+
+    if (!reviewId) {
+
+        showMessage(
+            "Invalid review ID.",
+            true
+        );
+
+        return;
+    }
+
+    if (rating < 1 || rating > 5) {
+
+        showMessage(
+            "Rating must be between 1 and 5.",
+            true
+        );
+
+        return;
+    }
+
+    const review = {
+
+        reviewId: reviewId,
+
+        userId: userId,
+
+        propertyId: propertyId,
+
+        rating: rating,
+
+        comment: comment || null
+
+    };
+
+    try {
+
+        const response =
+            await fetch(
+                apiUrl + "/" + reviewId,
+                {
+                    method: "PUT",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:
+                        JSON.stringify(review)
+                }
+            );
+
+        if (!response.ok) {
+
+            const text =
+                await response.text();
+
+            throw new Error(
+                text ||
+                "Failed to update review."
+            );
+
+        }
+
+        showMessage(
+            "Review updated successfully.",
+            false
+        );
+
+        clearForm();
+
+        await loadReviews();
+
+        await loadAverageRating();
+
+    }
+    catch (error) {
+
+        console.error(
+            "Error updating review:",
+            error
+        );
+
+        showMessage(
+            "Unable to update review.",
+            true
+        );
+
+    }
+
+}
+
+
+// =========================================================
+// Delete Review
+// =========================================================
+
+async function deleteReview(reviewId) {
+
+    const id =
+        Number(reviewId);
+
+    if (!id) {
+
+        alert("Invalid review ID.");
+
+        return;
+    }
+
+    const confirmed =
+        confirm(
+            "Are you sure you want to delete this review?"
+        );
+
+    if (!confirmed) {
+        return;
+    }
+
+    try {
+
+        const response =
+            await fetch(
+                apiUrl + "/" + id,
+                {
+                    method: "DELETE"
+                }
+            );
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Failed to delete review."
+            );
+
+        }
+
+        alert(
+            "Review deleted successfully."
+        );
+
+        await loadReviews();
+
+        await loadAverageRating();
+
+    }
+    catch (error) {
+
+        console.error(
+            "Error deleting review:",
+            error
+        );
+
+        alert(
+            "Unable to delete review."
+        );
+
+    }
+
+}
+
+
+// =========================================================
+// Clear Form
+// =========================================================
+
+function clearForm() {
+
+    const reviewInput =
+        getInput("reviewId");
+
+    const userInput =
+        getInput("userId");
+
+    const propertyInput =
+        getInput("propertyId");
+
+    const ratingInput =
+        getInput("rating");
+
+    const commentInput =
+        getInput("comment");
+
+    const formTitle =
+        getElement("formTitle");
+
+    const saveButton =
+        getElement("saveButton");
+
+    const cancelButton =
+        getElement("cancelButton");
+
+    if (reviewInput) {
+        reviewInput.value = "";
+    }
+
+    if (userInput) {
+        userInput.value = "1";
+    }
+
+    if (propertyInput) {
+        propertyInput.value = "1";
+    }
+
+    if (ratingInput) {
+        ratingInput.value = "5";
+    }
+
+    if (commentInput) {
+        commentInput.value = "";
+    }
+
+    if (formTitle) {
+        formTitle.textContent =
+            "Add Review";
+    }
+
+    if (saveButton) {
+        saveButton.textContent =
+            "Add Review";
+    }
+
+    if (cancelButton) {
+        cancelButton.classList.add(
+            "hidden"
+        );
+    }
+
+}
+
+
+// =========================================================
+// Button Events
+// =========================================================
+
+const saveButton =
+    getElement("saveButton");
+
+if (saveButton) {
+
+    saveButton.addEventListener(
+        "click",
+        async function () {
+
+            const reviewInput =
+                getInput("reviewId");
+
+            if (!reviewInput) {
+                return;
+            }
+
+            const reviewId =
+                Number(reviewInput.value);
+
+            if (reviewId) {
+
+                await updateReview();
+
+            }
+            else {
+
+                await createReview();
+
+            }
+
+        }
+    );
+
+}
+
+
+// =========================================================
+// Cancel Button
+// =========================================================
+
+const cancelButton =
+    getElement("cancelButton");
+
+if (cancelButton) {
+
+    cancelButton.addEventListener(
+        "click",
+        function () {
+
+            clearForm();
+
+        }
+    );
+
+}
+
+
+// =========================================================
+// Property ID Change
+// =========================================================
+
+const propertyInput =
+    getInput("propertyId");
+
+if (propertyInput) {
+
+    propertyInput.addEventListener(
+        "change",
+        async function () {
+
+            await loadAverageRating();
+
+        }
+    );
+
+}
+
+
+// =========================================================
+// Review Buttons
+// =========================================================
+
+const reviewsContainer =
+    getElement("reviewsContainer");
+
+if (reviewsContainer) {
+
+    reviewsContainer.addEventListener(
+        "click",
+        async function (event) {
+
+            const target =
+                event.target;
+
+            if (
+                !(target instanceof HTMLButtonElement)
+            ) {
+                return;
+            }
+
+            const action =
+                target.getAttribute(
+                    "data-action"
+                );
+
+            const id =
+                target.getAttribute(
+                    "data-id"
+                );
+
+            if (!id) {
+                return;
+            }
+
+            if (action === "edit") {
+
+                await editReview(
+                    Number(id)
+                );
+
+            }
+
+            if (action === "delete") {
+
+                await deleteReview(
+                    Number(id)
+                );
+
+            }
+
+        }
+    );
+
+}
+
+
+// =========================================================
+// Start Page
+// =========================================================
+
+document.addEventListener(
+    "DOMContentLoaded",
+    async function () {
+
+        await loadReviews();
+
+        await loadAverageRating();
+
+    }
+);
+
+    </script>
+
+</body>
+</html>
