@@ -128,10 +128,29 @@
     },
 
 
-    async get(url) {
+    async get(url, params) {
+
+        let finalUrl = url;
+
+        if (params) {
+
+            const query = new URLSearchParams();
+
+            for (const key in params) {
+                if (params[key] !== undefined && params[key] !== null && params[key] !== '') {
+                    query.append(key, params[key]);
+                }
+            }
+
+            const queryString = query.toString();
+
+            if (queryString) {
+                finalUrl = url + '?' + queryString;
+            }
+        }
 
         return await this.request(
-            url,
+            finalUrl,
             {
                 method: 'GET'
             }
@@ -170,10 +189,29 @@
     },
 
 
-    async delete(url) {
+    async delete(url, params) {
+
+        let finalUrl = url;
+
+        if (params) {
+
+            const query = new URLSearchParams();
+
+            for (const key in params) {
+                if (params[key] !== undefined && params[key] !== null && params[key] !== '') {
+                    query.append(key, params[key]);
+                }
+            }
+
+            const queryString = query.toString();
+
+            if (queryString) {
+                finalUrl = url + '?' + queryString;
+            }
+        }
 
         return await this.request(
-            url,
+            finalUrl,
             {
                 method: 'DELETE'
             }
