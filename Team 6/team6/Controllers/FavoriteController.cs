@@ -118,7 +118,7 @@ namespace team6.Controllers
         public async Task<ActionResult<IEnumerable<Favorite>>> GetFavoritesByUser(
             int userId)
         {
-            var favorites = await _context.Favorites5
+            var favorites = await _context.Favorites
                 .Include(f => f.Listing)
                 .Where(f => f.UserId == userId)
                 .ToListAsync();

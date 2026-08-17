@@ -51,6 +51,17 @@ public class ContractsController : ControllerBase
             .ToListAsync();
         return Ok(contracts);
     }
+    
+    // GET by user
+    [HttpGet("user/{userId}")]
+    public async Task<ActionResult<IEnumerable<Contract>>> GetContractsByUser(int userId)
+    {
+        var contracts = await _context.Contracts
+            .Include(c => c.Payments)
+            .Where(c => c.UserId == userId)
+            .ToListAsync();
+        return Ok(contracts);
+    }
 
     // GET filtered by status 
     [HttpGet("status/{status}")]
@@ -103,6 +114,8 @@ public class ContractsController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateContract(int id, Contract updated)
     {
+        if (id != updated.ContractId) return BadRequest("Route id and ContractId do not match.");
+
         var contract = await _context.Contracts.FindAsync(id);
         if (contract == null) return NotFound($"Contract {id} not found.");
 
