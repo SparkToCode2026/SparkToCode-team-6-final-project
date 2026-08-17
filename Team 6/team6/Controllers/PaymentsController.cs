@@ -91,6 +91,9 @@ public class PaymentsController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<Payment>> CreatePayment(Payment payment)
     {
+        if (payment.Amount <= 0) return BadRequest("Payment amount must be greater than zero.");
+        if (string.IsNullOrWhiteSpace(payment.Method)) return BadRequest("Payment method is required.");
+
         var contractExists = await _context.Contracts.AnyAsync(c => c.ContractId == payment.ContractId);
         if (!contractExists) return BadRequest("ContractId does not exist.");
 
@@ -107,6 +110,10 @@ public class PaymentsController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdatePayment(int id, Payment updated)
     {
+        if (id != updated.PaymentId) return BadRequest("Route id and PaymentId do not match.");
+        if (updated.Amount <= 0) return BadRequest("Payment amount must be greater than zero.");
+        if (string.IsNullOrWhiteSpace(updated.Method)) return BadRequest("Payment method is required.");
+
         var payment = await _context.Payments.FindAsync(id);
         if (payment == null) return NotFound($"Payment {id} not found.");
 

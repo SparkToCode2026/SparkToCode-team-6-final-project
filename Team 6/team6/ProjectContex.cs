@@ -20,19 +20,11 @@ namespace team6
         // Dev 4 - Favorite & Review
         public DbSet<Favorite> Favorites { get; set; }
         public DbSet<Review> Reviews { get; set; }
-
-
-
-
+        
         // Dev 2 - Property & PropertyType
         public DbSet<Property> Properties { get; set; }
         public DbSet<PropertyType> PropertyTypes { get; set; }
-
-//dev2
-//=======
-
-
-//main
+        
         // Dev 3 - Listing & Viewing
         public DbSet<Listing> Listings { get; set; }
         public DbSet<Viewing> Viewings { get; set; }
@@ -40,6 +32,10 @@ namespace team6
         // Dev 5 - Contract & Payment
         public DbSet<Contract> Contracts { get; set; }
         public DbSet<Payment> Payments { get; set; }
+        
+        // Dev 6 - City & Amenity
+        public DbSet<City> Cities { get; set; }
+        public DbSet<Amenity> Amenities { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -70,7 +66,7 @@ namespace team6
             // Dev 4 - Favorite -> Listing
             modelBuilder.Entity<Favorite>()
                 .HasOne(f => f.Listing)
-                .WithMany()
+                .WithMany(l => l.Favorites)
                 .HasForeignKey(f => f.ListingId)
                 .OnDelete(DeleteBehavior.Cascade);
 
@@ -87,9 +83,7 @@ namespace team6
                 .WithMany()
                 .HasForeignKey(r => r.PropertyId)
                 .OnDelete(DeleteBehavior.Cascade);
-
-
-
+            
             // Dev 2 - Property -> PropertyType (many properties can share one type)
             modelBuilder.Entity<Property>()
                 .HasOne(p => p.PropertyType)
@@ -124,13 +118,7 @@ namespace team6
                 .WithMany(p => p.Reviews)
                 .HasForeignKey(r => r.PropertyId)
                 .OnDelete(DeleteBehavior.Restrict);
-
-//dev2
-//=======
-
-
-
-//main
+            
             // Dev 5 - Contract -> User (many contracts can belong to one client)
             modelBuilder.Entity<Contract>()
                 .HasOne(c => c.User)
@@ -175,10 +163,6 @@ namespace team6
             modelBuilder.Entity<Amenity>();
         }
         
-        
-            // Dev 6 - City & Amenity
-        public DbSet<City> Cities { get; set; }
-        public DbSet<Amenity> Amenities { get; set; }
     }
     }
 
