@@ -1,0 +1,327 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Agents - Real Estate Management</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <!-- Our CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <header>
+        <nav class="navbar navbar-dark bg-dark">
+            <div class="container">
+
+                <a class="navbar-brand" href="index.html">
+                    Real Estate Management
+                </a>
+
+                <div>
+                    <a class="btn btn-outline-light" href="index.html">
+                        Home
+                    </a>
+
+                    <a class="btn btn-outline-light" href="users.html">
+                        Users
+                    </a>
+
+                    <a class="btn btn-outline-light" href="cities.html">
+                        Cities
+                    </a>
+
+                    <a class="btn btn-outline-light" href="amenities.html">
+                        Amenities
+                    </a>
+                </div>
+
+            </div>
+        </nav>
+    </header>
+
+
+    <main class="container mt-5">
+
+        <h2 class="mb-4">Agent Profile Management</h2>
+
+
+        <!-- Add / Update Agent Profile -->
+        <div class="card mb-4">
+
+            <div class="card-body">
+
+                <h5 class="card-title" id="formTitle">
+                    Add New Agent Profile
+                </h5>
+
+                <form id="agentForm">
+
+                    <!-- User ID -->
+                    <div class="mb-3">
+
+                        <label for="userId"
+                               class="form-label">
+                            Agent User ID
+                        </label>
+
+                        <input type="number"
+                               class="form-control"
+                               id="userId"
+                               required>
+
+                        <small class="text-muted">
+                            The User must have the Agent role.
+                        </small>
+
+                    </div>
+
+
+                    <!-- License Number -->
+                    <div class="mb-3">
+
+                        <label for="licenseNumber"
+                               class="form-label">
+                            License Number
+                        </label>
+
+                        <input type="text"
+                               class="form-control"
+                               id="licenseNumber"
+                               required>
+
+                    </div>
+
+
+                    <!-- Phone -->
+                    <div class="mb-3">
+
+                        <label for="phone"
+                               class="form-label">
+                            Phone
+                        </label>
+
+                        <input type="text"
+                               class="form-control"
+                               id="phone"
+                               required>
+
+                    </div>
+
+
+                    <!-- Bio -->
+                    <div class="mb-3">
+
+                        <label for="bio"
+                               class="form-label">
+                            Bio
+                        </label>
+
+                        <textarea class="form-control"
+                                  id="bio"
+                                  rows="3">
+                        </textarea>
+
+                    </div>
+
+
+                    <button type="submit"
+                            class="btn btn-primary"
+                            id="submitButton">
+                        Add Agent Profile
+                    </button>
+
+
+                    <button type="button"
+                            class="btn btn-secondary"
+                            id="cancelButton"
+                            onclick="cancelEdit()"
+                            style="display: none;">
+                        Cancel
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+
+        <!-- Find -->
+        <div class="card mb-4">
+
+            <div class="card-body">
+
+                <h5 class="card-title">
+                    Find Agent Profile
+                </h5>
+
+                <div class="row">
+
+                    <div class="col-md-6 mb-2">
+
+                        <input type="number"
+                               class="form-control"
+                               id="findAgentId"
+                               placeholder="Enter Agent Profile ID">
+
+                    </div>
+
+                    <div class="col-md-6">
+
+                        <button type="button"
+                                class="btn btn-primary"
+                                onclick="findAgent()">
+                            Find Agent
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Filter and Sort -->
+        <div class="card mb-4">
+
+            <div class="card-body">
+
+                <h5 class="card-title">
+                    Search and Statistics
+                </h5>
+
+                <div class="row">
+
+                    <div class="col-md-5 mb-2">
+
+                        <input type="text"
+                               class="form-control"
+                               id="filterName"
+                               placeholder="Enter agent name">
+
+                    </div>
+
+
+                    <div class="col-md-7 mb-2">
+
+                        <button type="button"
+                                class="btn btn-success"
+                                onclick="filterAgents()">
+                            Filter by Name
+                        </button>
+
+                        <button type="button"
+                                class="btn btn-info"
+                                onclick="showStats()">
+                            Sort & Statistics
+                        </button>
+
+                        <button type="button"
+                                class="btn btn-secondary"
+                                onclick="loadAgents()">
+                            Show All
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <p id="totalAgents"
+                   class="mt-3">
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- Agents Table -->
+        <div class="card">
+
+            <div class="card-body">
+
+                <h5 class="card-title">
+                    Agent Profiles
+                </h5>
+
+                <table class="table table-striped">
+
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Agent Name</th>
+                            <th>User ID</th>
+                            <th>License</th>
+                            <th>Phone</th>
+                            <th>Bio</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="agentsTableBody">
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <script src="/js/agent.js"></script>
+
+    <nav>
+        <div class="container">
+
+            <a class="navbar-brand" href="index.html">
+                Real Estate Management
+            </a>
+
+            <div>
+                <a class="btn btn-outline-light me-1"
+                   href="index.html">
+                    Home
+                </a>
+
+                <a class="btn btn-outline-light me-1"
+                   href="users.html">
+                    Users
+                </a>
+
+                <a class="btn btn-outline-light me-1"
+                   href="agents.html">
+                    Agents
+                </a>
+
+                <a class="btn btn-outline-light me-1"
+                   href="cities.html">
+                    Cities
+                </a>
+
+                <a class="btn btn-outline-light me-1"
+                   href="amenities.html">
+                    Amenities
+                </a>
+            </div>
+
+        </div>
+    </nav>
+
+</body>
+
+</html>
+

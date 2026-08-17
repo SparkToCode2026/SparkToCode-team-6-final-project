@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using team6;
 
@@ -11,9 +12,11 @@ using team6;
 namespace team6.Migrations
 {
     [DbContext(typeof(ProjectContex))]
-    partial class ProjectContexModelSnapshot : ModelSnapshot
+    [Migration("20260810132527_AddContractListingForeignKey")]
+    partial class AddContractListingForeignKey
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -170,8 +173,6 @@ namespace team6.Migrations
 
                     b.HasKey("ListingId");
 
-                    b.HasIndex("PropertyId");
-
                     b.ToTable("Listings");
                 });
 
@@ -202,100 +203,6 @@ namespace team6.Migrations
                     b.HasIndex("ContractId");
 
                     b.ToTable("Payments");
-                });
-
-            modelBuilder.Entity("team6.Models.Property", b =>
-                {
-                    b.Property<int>("PropertyId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PropertyId"));
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<int>("AgentId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Bathrooms")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Bedrooms")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CityId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
-
-                    b.Property<int>("PropertyTypeId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SquareFootage")
-                        .HasColumnType("int");
-
-                    b.HasKey("PropertyId");
-
-                    b.HasIndex("AgentId");
-
-                    b.HasIndex("CityId");
-
-                    b.HasIndex("PropertyTypeId");
-
-                    b.ToTable("Properties");
-                });
-
-            modelBuilder.Entity("team6.Models.PropertyType", b =>
-                {
-                    b.Property<int>("PropertyTypeId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PropertyTypeId"));
-
-                    b.Property<string>("TypeName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("PropertyTypeId");
-
-                    b.ToTable("PropertyTypes");
-                });
-
-            modelBuilder.Entity("team6.Models.Review", b =>
-                {
-                    b.Property<int>("ReviewId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ReviewId"));
-
-                    b.Property<string>("Comment")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<int>("PropertyId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Rating")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ReviewId");
-
-                    b.HasIndex("PropertyId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Review");
                 });
 
             modelBuilder.Entity("team6.Models.User", b =>
@@ -410,17 +317,6 @@ namespace team6.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("team6.Models.Listing", b =>
-                {
-                    b.HasOne("team6.Models.Property", "Property")
-                        .WithMany("Listings")
-                        .HasForeignKey("PropertyId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Property");
-                });
-
             modelBuilder.Entity("team6.Models.Payment", b =>
                 {
                     b.HasOne("team6.Models.Contract", "Contract")
@@ -430,52 +326,6 @@ namespace team6.Migrations
                         .IsRequired();
 
                     b.Navigation("Contract");
-                });
-
-            modelBuilder.Entity("team6.Models.Property", b =>
-                {
-                    b.HasOne("team6.Models.User", "Agent")
-                        .WithMany()
-                        .HasForeignKey("AgentId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("team6.Models.City", "City")
-                        .WithMany()
-                        .HasForeignKey("CityId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("team6.Models.PropertyType", "PropertyType")
-                        .WithMany("Properties")
-                        .HasForeignKey("PropertyTypeId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Agent");
-
-                    b.Navigation("City");
-
-                    b.Navigation("PropertyType");
-                });
-
-            modelBuilder.Entity("team6.Models.Review", b =>
-                {
-                    b.HasOne("team6.Models.Property", "Property")
-                        .WithMany("Reviews")
-                        .HasForeignKey("PropertyId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("team6.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Property");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("team6.Models.Viewing", b =>
@@ -509,18 +359,6 @@ namespace team6.Migrations
                     b.Navigation("Favorites");
 
                     b.Navigation("Viewings");
-                });
-
-            modelBuilder.Entity("team6.Models.Property", b =>
-                {
-                    b.Navigation("Listings");
-
-                    b.Navigation("Reviews");
-                });
-
-            modelBuilder.Entity("team6.Models.PropertyType", b =>
-                {
-                    b.Navigation("Properties");
                 });
 
             modelBuilder.Entity("team6.Models.User", b =>
