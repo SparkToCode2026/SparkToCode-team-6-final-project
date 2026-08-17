@@ -7,8 +7,8 @@ A platform where agents list properties for sale/rent, clients browse listings, 
 
 ## Tech Stack
 
-- **Backend:** ASP.NET Core Web API (.NET 10), Entity Framework Core (Code-First)
-- **Database:** SQL Server (via Docker)
+- **Backend:** ASP.NET Core Web API (.NET 10), Entity Framework Core
+- **Database:** SQL Server
 - **Auth:** JWT (JSON Web Tokens)
 - **Email:** SMTP email service (viewing confirmations & contract-signed notifications)
 - **Frontend:** HTML, CSS, JavaScript, Bootstrap
@@ -20,7 +20,7 @@ A platform where agents list properties for sale/rent, clients browse listings, 
 
 This starts everything in one process:
 - **API + Swagger:** `https://localhost:7235/swagger`
-- **Frontend:** `https://localhost:7235` (serves `wwwroot/index.html` automatically)
+- **Frontend:** `https://localhost:7235` 
 
 ### Log in
 Register a user via `register.html`, then log in via `login.html`. The JWT token is stored automatically and attached to protected API requests.
