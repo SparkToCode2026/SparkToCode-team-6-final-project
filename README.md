@@ -68,12 +68,12 @@ Each developer owned their 2 models end-to-end: ERD design, C# model + DbContext
 
 | Developer | Models | Pages |
 |---|---|---|
-| **Dev 1** | User, Agent Profile | `login.html`, `register.html`, `users.html`, `agents.html` |
-| **Dev 2** | Property, PropertyType | `Properties.html`, `property-form.html`, `PropertyTypes.html` |
-| **Dev 3** | Listing, Viewing | `Listings.html`, `Viewings.html` |
-| **Dev 4** | Favorite, Review | `favorites.html`, `reviews.html` |
-| **Dev 5** | Contract, Payment | `contracts.html`, `payment.html` |
-| **Dev 6** | City, Amenity | `cities.html`, `amenities.html` |
+| **Dev 1** | User, Agent Profile | Backend testing and finishing |
+| **Dev 2** | Property, PropertyType | `Properties.html`, `property-form.html`, `PropertyTypes.html` , `Listings.html`, `Viewings.html`|
+| **Dev 3** | Listing, Viewing | Backend testing and finishing |
+| **Dev 4** | Favorite, Review | `favorites.html`, `reviews.html` , `contracts.html`, `payment.html`|
+| **Dev 5** | Contract, Payment | Backend testing and finishing |
+| **Dev 6** | City, Amenity | `cities.html`, `amenities.html` , `login.html`, `register.html`, `users.html`, `agents.html`|
 
 ---
 
