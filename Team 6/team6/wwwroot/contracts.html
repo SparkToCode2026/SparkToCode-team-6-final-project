@@ -573,6 +573,34 @@
 
         try {
 
+            if (isEditing) {
+
+                const statusResponse =
+                    await fetch(
+                        apiUrl + "/" + contractIdValue + "/status",
+                        {
+                            method: "PUT",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify(status)
+                        }
+                    );
+
+                if (!statusResponse.ok) {
+
+                    const statusErrorText =
+                        await statusResponse.text();
+
+                    throw new Error(
+                        statusErrorText ||
+                        "Failed to update status."
+                    );
+                }
+
+            }
+
+
             const response =
                 await fetch(
                     isEditing ? (apiUrl + "/" + contractIdValue) : apiUrl,
@@ -648,77 +676,7 @@
         getElement("createButton").textContent = "Create Contract";
         getElement("cancelButton").style.display = "none";
     }
-
-
-    // =========================================
-    // CHANGE STATUS (inline dropdown per card)
-    // =========================================
-
-    async function changeStatus(contractId) {
-
-        const select =
-            document.getElementById("status-select-" + contractId);
-
-        const status = select.value;
-
-
-        try {
-
-            const url =
-                apiUrl +
-                "/" +
-                contractId +
-                "/status";
-
-
-            const response =
-                await fetch(
-                    url,
-                    {
-                        method: "PUT",
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify(status)
-                    }
-                );
-
-
-            if (!response.ok) {
-
-                const errorText =
-                    await response.text();
-
-                throw new Error(
-                    errorText ||
-                    "Failed to change status."
-                );
-            }
-
-
-            alert(
-                "Contract status updated successfully."
-            );
-
-
-            await loadContracts();
-
-        }
-        catch (error) {
-
-            console.error(
-                "Error changing status:",
-                error
-            );
-
-
-            alert(
-                "Unable to change contract status: " + error.message
-            );
-        }
-    }
-
-
+    
     // =========================================
     // EDIT CONTRACT (fills the top form)
     // =========================================
